@@ -5,4 +5,4 @@ from django.db import models
 class Item(models.Model):
     """Model class for a TO DO item."""
 
-    pass
+    text = models.TextField(default='')
