@@ -1,11 +1,16 @@
 """General functional tests for To Do list app."""
 from selenium import webdriver
+import django
+import os
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "superlists.settings")
+django.setup()
 from selenium.webdriver.common.keys import Keys
+from lists.models import Item
 import unittest
 
 
 class NewVisitorTest(unittest.TestCase):
-    """Class for testing a new user story."""
+    """Test a new user story."""
 
     def setUp(self):
         self.browser = webdriver.Firefox()
@@ -65,6 +70,28 @@ class NewVisitorTest(unittest.TestCase):
         # Satisfied she goes back to sleep
 
         self.browser.quit()
+
+
+class ItemModelTest(unittest.TestCase):
+    """Test model for items in TO DO list."""
+
+    def test_saving_and_retrieving_items(self):
+        """Test saving and retrieving items."""
+        first_item = Item()
+        first_item.text = 'The first (ever) list item'
+        first_item.save()
+
+        second_item = Item()
+        second_item.text = 'Item the second'
+        second_item.save()
+
+        saved_items = Item.objects.all()
+        self.assertEqual(saved_items.count(), 2)
+
+        first_saved_item = saved_items[0]
+        second_saved_item = saved_items[1]
+        self.assertEqual(first_saved_item.text, 'The first (ever) list item')
+        self.assertEqual(second_saved_item.text, 'Item the second')
 
 if __name__ == '__main__':
     unittest.main(warnings='ignore')
