@@ -8,7 +8,7 @@ from lists.models import Item
 
 
 class HomePageTest(TestCase):
-    """Test TO DO app home page."""
+    """Test class for testing TO DO app home page."""
 
     def test_root_url_resolves_to_home_page_view(self):
         found = resolve('/')
@@ -47,26 +47,34 @@ class HomePageTest(TestCase):
         response = self.client.post('/', data, follow=True)
 
         self.assertEqual(response.redirect_chain[0][1], 302)
-        self.assertRedirects(response, '/')
+        self.assertRedirects(response, '/lists/the-only-list-in-the-world/')
 
     def test_home_page_only_saves_items_when_neccessary(self):
         request = HttpRequest()
         home_page(request)
         self.assertEqual(Item.objects.count(), 0)
 
-    def test_home_page_displays_all_list_items(self):
+
+class ListViewTest(TestCase):
+    """Test class for testing list views."""
+
+    def test_displays_all_items(self):
         Item.objects.create(text='itemey 1')
         Item.objects.create(text='itemey 2')
 
-        request = HttpRequest()
-        response = home_page(request)
+        response = self.client.get('/lists/the-only-list-in-the-world/')
+        print(response.content)
 
-        self.assertIn('itemey 1', response.content.decode())
-        self.assertIn('itemey 2', response.content.decode())
+        self.assertContains(response, 'itemey 1')
+        self.assertContains(response, 'itemey 2')
+
+    def test_uses_list_templates(self):
+        response = self.client.get('/lists/the-only-list-in-the-world/')
+        self.assertTemplateUsed(response, 'list.html')
 
 
 class ItemModelTest(TestCase):
-    """Test model for items in TO DO list."""
+    """Test class for testing TO DO list item model."""
 
     def test_saving_and_retrieving_items(self):
         """Test saving and retrieving items."""
