@@ -1,4 +1,4 @@
-"""Unit test classes."""
+"""Unit tests for TO DO app."""
 from django.core.urlresolvers import resolve
 from django.template.loader import render_to_string
 from django.test import TestCase

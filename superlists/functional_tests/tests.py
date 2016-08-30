@@ -1,10 +1,10 @@
-"""General functional tests for To Do list app."""
+"""Functional tests for TO DO app."""
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-import unittest
+from django.test import LiveServerTestCase
 
 
-class NewVisitorTest(unittest.TestCase):
+class NewVisitorTest(LiveServerTestCase):
     """Test a new user story."""
 
     def setUp(self):
@@ -65,7 +65,3 @@ class NewVisitorTest(unittest.TestCase):
         # Satisfied she goes back to sleep
 
         self.browser.quit()
-
-
-if __name__ == '__main__':
-    unittest.main(warnings='ignore')
